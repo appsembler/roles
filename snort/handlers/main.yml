@@ -5,3 +5,7 @@
 
 - name: restart snort
   service: name=snort state=restarted
+
+- name: restart snort2pd
+  service: name=snort2pd state=restarted
+  when: snort_snort2pd_enabled

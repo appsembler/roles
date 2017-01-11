@@ -5,6 +5,7 @@ import datetime
 import hashlib
 import json
 import logging
+from platform import node
 import re
 from subprocess import Popen, PIPE
 import sys
@@ -96,7 +97,7 @@ def wait_for_alerts(pager, config):
         if (check_timestamp(log['timestamp'], START_TIME) and
                 incident_key not in incident_keys and
                 int(log['priority']) <= alert_priority):
-            description = 'Snort: {}'.format(log['message'])
+            description = 'Snort: {} [{}]'.format(log['message'], node())
             incident = pager.create_event(service_key, description, 'trigger',
                                           log, incident_key)
             incident_keys.add(incident_key)

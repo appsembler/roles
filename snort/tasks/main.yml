@@ -97,3 +97,5 @@
   tags: ['snort', 'snort:configuration']
 
 - include: pulledpork.yml
+
+- include: snort2pd.yml

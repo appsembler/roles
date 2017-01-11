@@ -1,0 +1,38 @@
+---
+
+- name: Install pygerduty
+  pip: name=pygerduty version=0.35.2
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Install snort2pd
+  copy: src=snort2pd.py dest=/usr/local/bin/snort2pd mode=0755
+  notify: restart snort2pd
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Create snort2pd configuration directory
+  file: path="{{ snort_snort2pd_config_dir }}" state=directory
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Copy snort2pd config file
+  template: src="snort2pd.json" dest="{{ snort_snort2pd_config_dir  }}/snort2pd.json"
+  notify: restart snort2pd
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Copy systemd service file for snort2pd
+  template: >
+    src=snort2pd.service
+    dest=/etc/systemd/system/snort2pd.service
+    mode=0644
+  notify:
+    - reload systemd configuration
+    - restart snort2pd
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Enable snort2pd service
+  service: name=snort2pd enabled="{{ snort_snort2pd_enabled }}"
+  tags: ['snort', 'snort:snort2pd']
+
+- name: Start snort2pd
+  service: name=snort2pd state=started
+  when: snort_snort2pd_enabled
+  tags: ['snort', 'snort:snort2pd']
