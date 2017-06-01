@@ -46,3 +46,7 @@ snort_pulledpork_rule_urls:
   - "http://talosintelligence.com/feeds/ip-filter.blf|IPBLACKLIST|open"
   - "https://www.snort.org/reg-rules/|opensource.gz|{{ snort_oinkcode }}"
 snort_pulledpork_ips_policy : "balanced"  # security, connectivity, or balanced
+
+snort_snort2pd_enabled: no
+snort_snort2pd_config_dir: "/etc/snort2pd"
+snort_snort2pd_config: {}

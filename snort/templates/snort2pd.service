@@ -1,0 +1,12 @@
+[Unit]
+Description=snort2pd -- Forward Snort alerts to PagerDuty
+Wants=snort.service
+After=snort.service
+
+[Service]
+ExecStart=/usr/local/bin/snort2pd
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
