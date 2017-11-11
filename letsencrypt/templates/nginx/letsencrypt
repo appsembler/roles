@@ -7,7 +7,7 @@
 server {
     listen 80 {{ default_site }};
     listen [::]:80 {{ default_site }};
-    server_name _;
+    server_name {{ letsencrypt_certs | sum(attribute='domains', start=[]) | join(' ') }};
 
     location '/.well-known/acme-challenge' {
         default_type "text/plain";
