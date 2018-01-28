@@ -1,7 +1,7 @@
 ---
 
-consul_template_image: "appsembler/consul-template"
-consul_template_image_tag: "0.19.4"
+consul_template_image: "hashicorp/consul-template"
+consul_template_image_tag: "0.19.4-scratch"
 
 consul_template_service: "consul-template.service"
 consul_template_wanted_by: "multi-user.target"
