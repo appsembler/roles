@@ -82,3 +82,13 @@
     - letsencrypt
     - letsencrypt:configuration
 
+# cron.d/certbot entry from certbot package doesn't work for certonly applications
+- name: Create cron job to renew certificates
+  cron: >
+    name="Let's Encrypt certificate renewal"
+    cron_file="letsencrypt"
+    special_time="daily"
+    user="root"
+    job="{{ letsencrypt_command }} renew --agree-tos"
+  tags:
+    - letsencrypt
