@@ -53,6 +53,15 @@
   when: letsencrypt_webserver == "nginx"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
+- name: Set permissions for log file
+  file:
+    path: "{{ letsencrypt_logfile }}"
+    state: touch
+    owner: "{{ letsencrypt_webuser }}"
+    group: "{{ letsencrypt_webuser }}"
+    mode: 0644
+  tags: ['letsencrypt', 'letsencrypt:configuration']
+
 - name: Generate certificates using webroot
   command: >
     {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}"
