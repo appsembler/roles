@@ -1,11 +1,11 @@
 ---
 
-snort_base_url: "https://downloads.sourceforge.net/project/slackbuildsdirectlinks/snort/"
+snort_base_url: "https://github.com/appsembler/roles/releases/download/v0.1-alpha/"
 snort_version: "2.9.9.0"
 snort_archive: "snort-{{ snort_version }}.tar.gz"
 snort_checksum: "sha256:71b147125e96390a12f3d55796ed5073df77206bd3563d84d3e5a1f19e7d7a56"
 
-snort_daq_base_url: "https://fossies.org/linux/misc/"
+snort_daq_base_url: "{{ snort_base_url }}"
 snort_daq_version: "2.0.6"
 snort_daq_archive: "daq-{{ snort_daq_version}}.tar.gz"
 snort_daq_checksum: "sha256:b40e1d1273e08aaeaa86e69d4f28d535b7e53bdb3898adf539266b63137be7cb"
