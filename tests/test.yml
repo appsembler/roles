@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - cert_agent
+    - consul_template
+    - gcsfuse
+    - incron
+    - letsencrypt
+    - logstash
+    - monit
+    - openjdk
+    - ossec
+    - sftp
+    - snort
+    - stackdriver
