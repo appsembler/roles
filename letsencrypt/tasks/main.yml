@@ -62,17 +62,33 @@
     mode: 0644
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
+- name: Generate certbot hook script
+  copy:
+    src=authenticator.sh
+    dest={{ letsencrypt_manual_auth_hook_script }}
+
 - name: Generate certificates using webroot
   command: >
-    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}"
-    --webroot -w "{{ letsencrypt_webroot }}" -d {{ item.domains | join(' -d ') }}
+    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --webroot -w "{{ letsencrypt_webroot }}" -d {{ item.domains | join(' -d ') }}
   args:
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
   become: True
   become_user: "{{ letsencrypt_webuser }}"
   run_once: true
-  when: letsencrypt_run|bool == true
+  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "webroot"
+  tags: ['letsencrypt', 'letsencrypt:run']
+
+- name: Generate certificates manually
+  command: >
+    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --manual --manual-public-ip-logging-ok --preferred-challenges=http --manual-auth-hook {{ letsencrypt_manual_auth_hook_script }} -d {{ item.domains | join(' -d ') }}
+  args:
+    creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
+  with_items: "{{ letsencrypt_certs }}"
+  become: True
+  become_user: "{{ letsencrypt_webuser }}"
+  run_once: true
+  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual"
   tags: ['letsencrypt', 'letsencrypt:run']
 
 - name: Make sure certbot systemd override dir exists
@@ -90,4 +106,3 @@
   tags:
     - letsencrypt
     - letsencrypt:configuration
-
