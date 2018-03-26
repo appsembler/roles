@@ -62,10 +62,13 @@
     mode: 0644
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
+- name: Create target hook script directory
+  file: path=/opt/scripts state=directory mode=0755
+
 - name: Generate certbot hook script
   copy:
     src=authenticator.sh
-    dest={{ letsencrypt_manual_auth_hook_script }}
+    dest=/opt/scripts/authenticator.sh
 
 - name: Generate certificates using webroot
   command: >
