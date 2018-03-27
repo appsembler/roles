@@ -84,7 +84,7 @@
 
 - name: Generate certificates manually
   command: >
-    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --manual --manual-public-ip-logging-ok --preferred-challenges=http --manual-auth-hook {{ letsencrypt_manual_auth_hook_script }} -d {{ item.domains | join(' -d ') }}
+    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --manual --manual-public-ip-logging-ok --preferred-challenges=http --manual-auth-hook /opt/scripts/authenticator.sh -d {{ item.domains | join(' -d ') }}
   args:
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
