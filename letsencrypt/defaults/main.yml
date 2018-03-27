@@ -2,8 +2,10 @@
 
 letsencrypt_package: "certbot"
 letsencrypt_command: "certbot"
+letsencrypt_certbot_plugin: "webroot"
 letsencrypt_webroot: "/var/www/letsencrypt"
 letsencrypt_logfile: "/var/log/letsencrypt/letsencrypt.log"
+letsencrypt_alternative_acme_folder: ""
 letsencrypt_webuser: "www-data"
 letsencrypt_webserver: "nginx"
 letsencrypt_webserver_config: "nginx/letsencrypt"
