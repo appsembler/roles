@@ -64,11 +64,14 @@
 
 - name: Create target hook script directory
   file: path=/opt/scripts state=directory mode=0755
+  tags: ['letsencrypt', 'letsencrypt:run']
 
 - name: Generate certbot hook script
-  copy:
-    src=authenticator.sh
-    dest=/opt/scripts/authenticator.sh
+  template:
+    src: opt/scripts/authenticator.sh.j2
+    dest: /opt/scripts/authenticator.sh
+    mode: 0744
+  tags: ['letsencrypt', 'letsencrypt:run']
 
 - name: Generate certificates using webroot
   command: >
