@@ -1,6 +1,6 @@
 ---
 
-letsencrypt_package: "certbot"
+letsencrypt_package: "certbot=0.22.*"  # Pin to prevent major updates (more in letsencrypt/README.md)
 letsencrypt_command: "certbot"
 letsencrypt_certbot_plugin: "webroot"
 letsencrypt_webroot: "/var/www/letsencrypt"
