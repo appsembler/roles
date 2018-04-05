@@ -60,7 +60,7 @@
     owner: "{{ letsencrypt_webuser }}"
     group: "{{ letsencrypt_webuser }}"
     mode: 0644
-  tags: ['letsencrypt', 'letsencrypt:configuration']
+  tags: ['letsencrypt', 'letsencrypt:configuration', 'letsencrypt:renew']
 
 - name: Create target hook script directory
   file: path=/opt/scripts state=directory mode=0755
@@ -75,7 +75,12 @@
 
 - name: Generate certificates using webroot
   command: >
-    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --webroot -w "{{ letsencrypt_webroot }}" -d {{ item.domains | join(' -d ') }}
+    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }}
+    --agree-tos
+    --email "{{ letsencrypt_email }}"
+    --webroot
+    --webroot-path "{{ letsencrypt_webroot }}"
+    --domains {{ item.domains | join(' --domains ') }}
   args:
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
@@ -84,6 +89,30 @@
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "webroot"
   tags: ['letsencrypt', 'letsencrypt:run']
+
+- name: Renew the webroot certificate if needed
+  # certbot is smart enough to renew only when needed
+  # This task is useful till we solve the LetsEncrypt cronjob issue
+  command: >
+    {{ letsencrypt_command }} renew --cert-name {{ item.domains[0] }}
+  with_items: "{{ letsencrypt_certs }}"
+  become: True
+  become_user: "{{ letsencrypt_webuser }}"
+  when:
+    - letsencrypt_run|bool == true
+    - letsencrypt_certbot_plugin == "webroot"
+  tags: ['letsencrypt', 'letsencrypt:run', 'letsencrypt:renew']
+
+- name: Reload nginx
+  # Reload nginx one more time just in case a certificate was renewed
+  # TODO: (Omar) This is probably useless due to `certbot_override.conf`,
+  #       but we're having too many issues right now in this role to try to worry about optimizing out a single reload.
+  service: name=nginx state=reloaded
+  when:
+    - letsencrypt_run|bool == true
+    - letsencrypt_certbot_plugin == "webroot"
+    - letsencrypt_webserver == "nginx"
+  tags: ['letsencrypt', 'letsencrypt:run', 'letsencrypt:renew']
 
 - name: Generate certificates manually
   command: >
