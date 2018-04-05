@@ -32,7 +32,7 @@
   tags: ['consul_template', 'consul_template:configuration']
 
 - name: Copy template files
-  copy: >
+  template: >
     src="{{ item }}" dest="{{ consul_template_template_dir }}/{{ item | basename }}"
   notify: restart consul-template
   with_items: "{{ consul_template_templates }}"
