@@ -1,3 +1,3 @@
 site/
 /.idea/
-tests/travis.retry
+*.retry
