@@ -8,7 +8,9 @@
     - letsencrypt:install
 
 - name: Install Let's Encrypt
-  apt: name="{{ letsencrypt_package }}"
+  apt:
+    name: "{{ letsencrypt_package }}"
+    update_cache: yes
   tags: ['letsencrypt', 'letsencrypt:install']
 
 - name: Create Let's Encrypt directories
@@ -33,12 +35,62 @@
   become_user: "{{ letsencrypt_webuser }}"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
+- name: Count the number of certbot installations
+  shell: whereis {{ letsencrypt_command }} | grep -w -o '/[^ ]*bin/[^ ]*{{ letsencrypt_command }}' | wc -l
+  register: certbot_count_call
+  become: True
+  become_user: root
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:check
+
+- fail:
+    msg: There's more than one certbot installation
+    # Login to the server and run: `$ whereis certbot`.
+    # Unfortunately, there's no clear way to solve this issue, so try to solve it manually. Suggestion:
+    #   - `$ sudo apt-get purge certbot`
+    #   - `$ sudo pip uninstall certbot`
+    #   - If there's another `$ which certbot`, uninstall it.
+    #   - Re-run this playbook
+  when: certbot_count_call.stdout != "1"
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:check
+
+- name: Get the certbot version
+  shell: certbot --version 2>&1 | cut -d ' ' -f 2
+  register: certbot_version_call
+  become: True
+  become_user: root
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:check
+
+- fail:
+    msg: >
+      An installed certbot version on the server
+      ({{ certbot_version_call.stdout }}) do not match the required
+      ({{ letsencyrpt_version }}) by the playbook
+    # Login to the server and run: `$ pip freeze | grep certbot`.
+    # Unfortunately, there's no clear way to solve this issue, look at `certbot_count_call` above.
+  when: certbot_version_call.stdout is version_compare(letsencyrpt_version, operator='ne', strict=True)
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:check
+
 - name: Copy nginx config
   template:
     src: "{{ letsencrypt_webserver_config }}"
     dest: "{{ letsencrypt_webserver_sites_available }}/{{ letsencrypt_webserver_config | basename }}"
   when: letsencrypt_webserver == "nginx"
-  tags: ['letsencrypt', 'letsencrypt:configuration']
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:nginx
 
 - name: Enable nginx config
   file:
@@ -46,21 +98,31 @@
     path: "{{ letsencrypt_webserver_sites_enabled }}/{{ letsencrypt_webserver_config | basename }}"
     src: "{{ letsencrypt_webserver_sites_available }}/{{ letsencrypt_webserver_config | basename }}"
   when: letsencrypt_webserver == "nginx"
-  tags: ['letsencrypt', 'letsencrypt:configuration']
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:nginx
 
 - name: Reload nginx
   service: name=nginx state=reloaded
   when: letsencrypt_webserver == "nginx"
-  tags: ['letsencrypt', 'letsencrypt:configuration']
+  tags:
+    - letsencrypt
+    - letsencrypt:configuration
+    - letsencrypt:nginx
 
-- name: Set permissions for log file
+- name: Set permissions for log file and ensure it exists
   file:
     path: "{{ letsencrypt_logfile }}"
     state: touch
     owner: "{{ letsencrypt_webuser }}"
     group: "{{ letsencrypt_webuser }}"
     mode: 0644
-  tags: ['letsencrypt', 'letsencrypt:configuration', 'letsencrypt:renew']
+  tags:
+    - letsencrypt
+    - letsencrypt:run
+    - letsencrypt:configuration
+    - letsencrypt:renew
 
 - name: Create target hook script directory
   file: path=/opt/scripts state=directory mode=0755
@@ -85,7 +147,7 @@
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
   become: True
-  become_user: "{{ letsencrypt_webuser }}"
+  become_user: root
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "webroot"
   tags: ['letsencrypt', 'letsencrypt:run']
@@ -97,22 +159,23 @@
     {{ letsencrypt_command }} renew --cert-name {{ item.domains[0] }}
   with_items: "{{ letsencrypt_certs }}"
   become: True
-  become_user: "{{ letsencrypt_webuser }}"
+  become_user: root
   when:
     - letsencrypt_run|bool == true
     - letsencrypt_certbot_plugin == "webroot"
-  tags: ['letsencrypt', 'letsencrypt:run', 'letsencrypt:renew']
+  tags:
+    - letsencrypt:renew  # More on letsencrypt/README.md
 
 - name: Reload nginx
   # Reload nginx one more time just in case a certificate was renewed
-  # TODO: (Omar) This is probably useless due to `certbot_override.conf`,
-  #       but we're having too many issues right now in this role to try to worry about optimizing out a single reload.
   service: name=nginx state=reloaded
   when:
     - letsencrypt_run|bool == true
     - letsencrypt_certbot_plugin == "webroot"
     - letsencrypt_webserver == "nginx"
-  tags: ['letsencrypt', 'letsencrypt:run', 'letsencrypt:renew']
+  tags:
+    - letsencrypt:renew  # More on letsencrypt/README.md
+    - letsencrypt:nginx
 
 - name: Generate certificates manually
   command: >
@@ -121,23 +184,34 @@
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
   become: True
-  become_user: "{{ letsencrypt_webuser }}"
+  become_user: root
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual"
   tags: ['letsencrypt', 'letsencrypt:run']
 
-- name: Make sure certbot systemd override dir exists
-  file: path=/etc/systemd/system/certbot.service.d state=directory
+- name: Remove legacy certbot.conf
+  # Earlier this role used to create that file, but now it is useless
+  file:
+    path: /etc/systemd/system/certbot.service.d/certbot.conf
+    state: absent
   tags:
     - letsencrypt
     - letsencrypt:configuration
 
-- name: Make sure to restart service on certbot/ssl renewal
-  copy:
-    src=certbot_override.conf
-    dest=/etc/systemd/system/certbot.service.d/certbot.conf
-  notify:
-    - reload systemd configuration
+- name: Create an additional cron job to renew certificates
+  # cron.d/certbot entry from certbot package doesn't work for for Ubuntu 16.04 because of systemd directory exists
+  # We still don't know why such a problem exists, becasue systemd is supposed to run certbot instead.
+  #
+  # Anyway this additional cronjob solve the problem, and running renew twice should be harmless.
+  cron:
+    name: "Let's Encrypt certificate renewal"
+    cron_file: certbot_appsembler
+    special_time: daily
+    user: root
+    # `>` makes it into a single line. The line-break is for developer readability.
+    # The `sleep()` is recommended by certbot to avoid effectively bombarding their servers at the same time
+    job: >
+      perl -e 'sleep int(rand(3600))' &&
+      {{ letsencrypt_command }} renew --agree-tos --post-hook='service nginx reload'
   tags:
     - letsencrypt
-    - letsencrypt:configuration

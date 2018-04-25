@@ -1,6 +1,12 @@
 ---
 
-letsencrypt_package: "certbot=0.22.*"  # Pin to prevent major updates (more in letsencrypt/README.md)
+# Pin to prevent unintentional updates (more in letsencrypt/README.md)
+
+# Note: The trailing `-*` is to match the rather verbose package
+#       versions in Debian e.g. `0.22.2-1+ubuntu16.04.1+certbot+1`
+letsencrypt_package: "certbot={{ letsencyrpt_version }}-*"
+letsencyrpt_version: "0.22.2"
+
 letsencrypt_command: "certbot"
 letsencrypt_certbot_plugin: "webroot"
 letsencrypt_webroot: "/var/www/letsencrypt"
