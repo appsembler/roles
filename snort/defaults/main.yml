@@ -1,15 +1,12 @@
 ---
 
-snort_base_url: "https://github.com/appsembler/roles/releases/download/v0.1-alpha/"
+snort_base_url: "https://snort.org/downloads/archive/snort"
 snort_version: "2.9.9.0"
-snort_archive: "snort-{{ snort_version }}.tar.gz"
-snort_checksum: "sha256:71b147125e96390a12f3d55796ed5073df77206bd3563d84d3e5a1f19e7d7a56"
-
-snort_daq_base_url: "{{ snort_base_url }}"
 snort_daq_version: "2.0.6"
+snort_archive: "snort-{{ snort_version }}.tar.gz"
 snort_daq_archive: "daq-{{ snort_daq_version}}.tar.gz"
-snort_daq_checksum: "sha256:b40e1d1273e08aaeaa86e69d4f28d535b7e53bdb3898adf539266b63137be7cb"
-
+snort_checksum: "71b147125e96390a12f3d55796ed5073df77206bd3563d84d3e5a1f19e7d7a56"
+snort_daq_checksum: "d41da5f7793e66044e6927dd868c0525e7ee4ec1a3515bf74ef9a30cd9273af0"
 snort_download_dir: "/tmp/snort"
 snort_prerequisites:
   - bison
@@ -39,7 +36,7 @@ snort_force_restart: no
 snort_pulledpork_base_url: "https://github.com/shirkdog/pulledpork/archive"
 snort_pulledpork_version: "0.7.2"
 snort_pulledpork_archive: "v{{ snort_pulledpork_version}}.tar.gz"
-snort_pulledpork_checksum: "sha256:50046477d5d1a18aec131a56bd3f21170057d8a31fd6f30af706e31d5b14bd0a"
+snort_pulledpork_checksum: "50046477d5d1a18aec131a56bd3f21170057d8a31fd6f30af706e31d5b14bd0a"
 snort_pulledpork_config: "pulledpork.conf"
 snort_pulledpork_config_dir: "/etc/pulledpork"
 snort_pulledpork_run: yes
