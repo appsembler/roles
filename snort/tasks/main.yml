@@ -13,14 +13,14 @@
   get_url: >
     url="{{ snort_daq_base_url }}/{{ snort_daq_archive }}"
     dest="{{ snort_download_dir }}/{{ snort_daq_archive }}"
-    checksum="{{ snort_daq_checksum }}"
+    sha256sum="{{ snort_daq_checksum }}"
   tags: ['snort', 'snort:install']
 
 - name: Download Snort
   get_url: >
     url="{{ snort_base_url }}/{{ snort_archive }}"
     dest="{{ snort_download_dir }}/{{ snort_archive }}"
-    checksum="{{ snort_checksum }}"
+    sha256sum="{{ snort_checksum }}"
   tags: ['snort', 'snort:install']
 
 - name: Unarchive Snort DAQ

@@ -13,7 +13,7 @@
   get_url: >
     url="{{ ossec_base_url }}/{{ ossec_archive }}"
     dest="{{ ossec_download_dir }}/{{ ossec_archive }}"
-    checksum="{{ ossec_checksum }}"
+    sha256sum="{{ ossec_checksum }}"
   tags: ['ossec', 'ossec:install']
 
 - name: Unarchive OSSEC

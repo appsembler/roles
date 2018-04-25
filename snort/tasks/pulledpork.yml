@@ -11,7 +11,7 @@
   get_url: >
     url="{{ snort_pulledpork_base_url }}/{{ snort_pulledpork_archive }}"
     dest="{{ snort_download_dir }}/{{ snort_pulledpork_archive }}"
-    checksum="{{ snort_pulledpork_checksum }}"
+    sha256sum="{{ snort_pulledpork_checksum }}"
   tags: ['snort', 'snort:install']
 
 - name: Unarchive Pulled Pork
