@@ -75,19 +75,22 @@
   with_items: "{{ snort_custom_rules_files }}"
   tags: ['snort', 'snort:configuration']
 
-- name: Copy systemd service file
-  template: src=snort.service dest=/etc/systemd/system/snort.service mode=0644
-  notify:
-    - reload systemd configuration
-    - restart snort
-  when: ansible_service_mgr == "systemd"
-  tags: ['snort', 'snort:configuration']
+# no ansible_service_mgr fact in Ansible 1.9
+# for Dogwood compat, we know Ubuntu 12.04 uses upstart
+# sudo /sbin/init --version
+# - name: Copy systemd service file
+#   template: src=snort.service dest=/etc/systemd/system/snort.service mode=0644
+#   notify:
+#     - reload systemd configuration
+#     - restart snort
+#   when: ansible_service_mgr == "systemd"
+#   tags: ['snort', 'snort:configuration']
 
 - name: Copy upstart service file
   template: src=snort_upstart.conf dest=/etc/init/snort.conf mode=0644
   notify:
     - restart snort
-  when: ansible_service_mgr == "upstart"
+  # when: ansible_service_mgr == "upstart"
   tags: ['snort', 'snort:configuration']
 
 - name: Enable Snort service
