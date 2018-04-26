@@ -6,7 +6,7 @@
 
 server {
     listen 80 {{ default_site }};
-    listen [::]:80 {{ default_site }};
+    listen [::]:80 ipv6only=on {{ default_site }};
     server_name {{ letsencrypt_certs | sum(attribute='domains', start=[]) | join(' ') }};
 
     location '/.well-known/acme-challenge' {

@@ -1,17 +1,16 @@
 ---
-- name: Add certbot repo
-  apt_repository:
-    repo: 'ppa:certbot/certbot'
-    state: present
-  tags:
-    - letsencrypt
-    - letsencrypt:install
+# use cert-bot auto when no package exists for OS (e.g., Ubuntu < 16)
+- name: download certbot-auto
+  get_url: url="https://dl.eff.org/certbot-auto" dest="/usr/local/bin" mode="a+x" owner="{{ letsencrypt_webuser }}"
+  sudo: True
+  when: letsencrypt_package == 'certbot-auto'
+  tags: ['letsencrypt']
 
-- name: Install Let's Encrypt
-  apt:
-    name: "{{ letsencrypt_package }}"
-    update_cache: yes
-  tags: ['letsencrypt', 'letsencrypt:install']
+- name: bootstrap certbot-auto OS dependencies
+  command: "certbot-auto --os-packages-only -n"
+  sudo: True
+  when: letsencrypt_package == 'certbot-auto'
+  tags: ['letsencrypt']  
 
 - name: Create Let's Encrypt directories
   file:
@@ -69,18 +68,6 @@
     - letsencrypt:configuration
     - letsencrypt:check
 
-- fail:
-    msg: >
-      An installed certbot version on the server
-      ({{ certbot_version_call.stdout }}) do not match the required
-      ({{ letsencyrpt_version }}) by the playbook
-    # Login to the server and run: `$ pip freeze | grep certbot`.
-    # Unfortunately, there's no clear way to solve this issue, look at `certbot_count_call` above.
-  when: certbot_version_call.stdout is version_compare(letsencyrpt_version, operator='ne', strict=True)
-  tags:
-    - letsencrypt
-    - letsencrypt:configuration
-    - letsencrypt:check
 
 - name: Copy nginx config
   template:
@@ -198,7 +185,7 @@
     - letsencrypt
     - letsencrypt:configuration
 
-- name: Create an additional cron job to renew certificates
+- name: Create an additional cron job to renew certificatesc
   # cron.d/certbot entry from certbot package doesn't work for for Ubuntu 16.04 because of systemd directory exists
   # We still don't know why such a problem exists, becasue systemd is supposed to run certbot instead.
   #
