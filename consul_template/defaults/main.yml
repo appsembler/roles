@@ -16,7 +16,7 @@ consul_template_rendered_dir: "/etc/consul-template/rendered"
 
 # Options for the default configuration file
 consul_template_consul: "consul.service.consul:8500"
-consul_template_command: "/bin/true"
+consul_template_command: ""
 
 # Extra options to pass to `docker run` when starting the systemd service
 consul_template_docker_options: ""
