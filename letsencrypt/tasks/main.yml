@@ -73,10 +73,10 @@
     msg: >
       An installed certbot version on the server
       ({{ certbot_version_call.stdout }}) do not match the required
-      ({{ letsencyrpt_version }}) by the playbook
+      ({{ letsencrypt_version }}) by the playbook
     # Login to the server and run: `$ pip freeze | grep certbot`.
     # Unfortunately, there's no clear way to solve this issue, look at `certbot_count_call` above.
-  when: certbot_version_call.stdout is version_compare(letsencyrpt_version, operator='ne', strict=True)
+  when: certbot_version_call.stdout is version_compare(letsencrypt_version, operator='ne', strict=True)
   tags:
     - letsencrypt
     - letsencrypt:configuration
