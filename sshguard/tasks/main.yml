@@ -7,14 +7,10 @@
     update_cache: yes
   tags: ['sshguard', 'sshguard:install']
 
-- name: update sshguard whitelist
-  lineinfile:
+- name: Set sshguard whitelist
+  template:
+    src: whitelist.j2
     dest: /etc/sshguard/whitelist
-    regexp: "^{{ item }}"
-    line: "{{ item }}"
-    state: present
-  with_items:
-    - "{{sshguard_whitelist}}"
   notify: restart sshguard
   tags: ['sshguard', 'sshguard:configuration']
 

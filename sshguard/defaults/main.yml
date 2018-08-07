@@ -1,5 +1,2 @@
 ---
-
-sshguard_whitelist:
-  - "127.0.0.0/8"
-  - "::1/128"
+sshguard_whitelist: []  # Customer-specific whitelist, to be defined for customers who need it
