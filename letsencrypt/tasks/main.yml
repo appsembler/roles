@@ -9,8 +9,7 @@
 
 - name: Install Let's Encrypt
   apt:
-    name: "{{ letsencrypt_package }}"
-    update_cache: yes
+    deb: "{{ letsencrypt_mirror_deb_url }}"
   tags: ['letsencrypt', 'letsencrypt:install']
 
 - name: Create Let's Encrypt directories
