@@ -186,7 +186,18 @@
   become: True
   become_user: root
   run_once: true
-  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual"
+  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" letsencrypt_execute_for_single_domain == false
+  tags: ['letsencrypt', 'letsencrypt:run']
+
+- name: Generate single certificate manually
+  command: >
+    {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --manual --manual-public-ip-logging-ok --preferred-challenges=http --manual-auth-hook /opt/scripts/authenticator.sh -d {{ letsencrypt_single_cert }}
+  args:
+    creates: /etc/letsencrypt/live/{{ letsencrypt_single_cert }}/fullchain.pem
+  become: True
+  become_user: root
+  run_once: true
+  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" and letsencrypt_execute_for_single_domain == true
   tags: ['letsencrypt', 'letsencrypt:run']
 
 - name: Remove legacy certbot.conf
