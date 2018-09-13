@@ -18,6 +18,7 @@ cert_agent_gunicorn_runtime_dir_name: cert_agent
 cert_agent_gunicorn_pid: "/run/{{ cert_agent_gunicorn_runtime_dir_name }}/pid"
 cert_agent_gunicorn_bind_ip: "0.0.0.0"
 cert_agent_gunicorn_port: "18000"
+cert_agent_gunicorn_timeout: "30"
 
 cert_agent_ansible_cmd: "cd /edx/app/edx_ansible/edx_ansible/playbooks && ../../venvs/edx_ansible/bin/ansible-playbook -i ../../app_nodes_inventory --extra-vars '@../../server-vars.yml' --tags=sudo,custom_domains,letsencrypt:run,nginx:custom_domains amc.yml"
 
@@ -32,4 +33,3 @@ cert_agent_django_env_vars: {
 }
 
 cert_agent_ssh_private_key: "changeme"
-

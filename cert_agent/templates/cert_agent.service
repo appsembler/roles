@@ -11,7 +11,8 @@ RuntimeDirectory={{ cert_agent_gunicorn_runtime_dir_name }}
 ExecStart={{ cert_agent_venv_dir }}/bin/gunicorn --pid {{ cert_agent_gunicorn_pid }} \
           --bind {{ cert_agent_gunicorn_bind_ip }}:{{ cert_agent_gunicorn_port }} \
           -w 3 \
-          cert_agent.wsgi:application
+          cert_agent.wsgi:application \
+          --timeout {{ cert_agent_gunicorn_timeout }}
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 PrivateTmp=true
