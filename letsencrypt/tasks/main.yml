@@ -186,7 +186,7 @@
   become: True
   become_user: root
   run_once: true
-  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" letsencrypt_execute_for_single_domain == false
+  when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" and letsencrypt_execute_for_single_domain == false
   tags: ['letsencrypt', 'letsencrypt:run']
 
 - name: Generate single certificate manually
