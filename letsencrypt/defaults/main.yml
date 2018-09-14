@@ -20,6 +20,8 @@ letsencrypt_webserver_sites_enabled: "/etc/nginx/sites-enabled"
 letsencrypt_https_redirect: false
 letsencrypt_email: !!null
 letsencrypt_certs: []
+letsencrypt_single_cert: ""
+letsencrypt_execute_for_single_domain: false
 letsencrypt_flags: ""
 letsencrypt_run: true
 letsencrypt_enable_default_server: false
