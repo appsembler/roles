@@ -7,6 +7,7 @@ cert_agent_venv_dir: "{{cert_agent_venv_dir_base }}/cert_agent"
 cert_agent_django_project_dir: "{{cert_agent_git_repo_dir}}/cert_agent"
 cert_agent_django_media_dir: "{{cert_agent_git_repo_dir}}/media"
 cert_agent_django_static_dir: "{{cert_agent_git_repo_dir}}/staticfiles"
+cert_agent_log_directory: /var/log/tahoe_cert_agent/
 
 cert_agent_api_secret_key: "changeme"
 cert_agent_django_debug: false
@@ -29,7 +30,8 @@ cert_agent_django_env_vars: {
   DJANGO_SECRET_KEY: "{{ cert_agent_django_secret_key }}",
   DJANGO_SETTINGS_MODULE: "{{ cert_agent_django_settings_module }}",
   ANSIBLE_CMD: "{{ cert_agent_ansible_cmd }}",
-  DJANGO_LOG_LEVEL: "DEBUG"
+  DJANGO_LOG_LEVEL: "DEBUG",
+  ANSIBLE_LOG_DIR: "{{ cert_agent_log_directory }}",
 }
 
 cert_agent_ssh_private_key: "changeme"
