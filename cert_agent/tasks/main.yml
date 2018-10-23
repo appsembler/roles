@@ -4,6 +4,13 @@
   user: name={{ cert_agent_app_user }} shell=/bin/bash comment="Cert Agent User"
   tags: ['cert_agent', 'cert_agent:configuration']
 
+- name: Create log directory
+  file:
+    path: "{{ cert_agent_log_directory }}"
+    state: directory
+    owner: "{{ cert_agent_app_user }}"
+  tags: ['cert_agent', 'cert_agent:install']
+
 - name: Clone app repository
   become_user: "{{ cert_agent_app_user }}"
   git: >
