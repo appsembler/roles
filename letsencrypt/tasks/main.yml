@@ -10,7 +10,7 @@
 - name: Install Let's Encrypt
   apt:
     name: "{{ letsencrypt_package }}"
-    update_cache: yes
+#    update_cache: yes
   tags: ['letsencrypt', 'letsencrypt:install']
 
 - name: Create Let's Encrypt directories
