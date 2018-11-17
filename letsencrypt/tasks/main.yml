@@ -138,13 +138,14 @@
 - name: Generate certificates using webroot
   command: >
     {{ letsencrypt_command }} certonly {{ letsencrypt_flags }}
+    --cert-name {{item.domains[0]}}
     --agree-tos
     --email "{{ letsencrypt_email }}"
     --webroot
     --webroot-path "{{ letsencrypt_webroot }}"
     --domains {{ item.domains | join(' --domains ') }}
-  args:
-    creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
+  # args: # so that domains can be added or removed
+  #   creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
   become: True
   become_user: root
