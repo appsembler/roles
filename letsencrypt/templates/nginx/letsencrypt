@@ -8,6 +8,11 @@ server {
         root {{ letsencrypt_webroot }};
     }
 
+    location /status/ {
+        # return a 200 to Google Load Balancer's health checks
+        return 200 'ok';
+    }
+
 {% if letsencrypt_https_redirect %}
     location / {
         # Redirect to https
