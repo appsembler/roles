@@ -5,7 +5,7 @@
 # Note: The trailing `-*` is to match the rather verbose package
 #       versions in Debian e.g. `0.22.2-1+ubuntu16.04.1+certbot+1`
 letsencrypt_package: "certbot={{ letsencrypt_version }}-*"
-letsencrypt_version: "0.26.1"
+letsencrypt_version: "0.28.0"
 
 letsencrypt_command: "certbot"
 letsencrypt_certbot_plugin: "webroot"
