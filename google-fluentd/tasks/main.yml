@@ -9,7 +9,7 @@
   get_url:
     url: https://dl.google.com/cloudagents/install-logging-agent.sh
     dest: "/tmp/install-logging-agent.sh"
-    mode: "+x"
+    mode: "0755"
   when: google_fluentd_installed.stat.exists == False
 
 - name: Install the Logging Agent
