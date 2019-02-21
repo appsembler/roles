@@ -5,3 +5,4 @@
     - gcsfuse
     - incron
     - sshguard
+    - google-fluentd
