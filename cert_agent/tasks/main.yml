@@ -103,7 +103,7 @@
     - restart cert_agent
   tags: ['cert_agent', 'cert_agent:configuration']
 
-- name: Copy cert_agent systemd service
+- name: Copy cert_agent ssh private key
   become_user: "{{ cert_agent_app_user }}"
   copy:
       content={{ cert_agent_ssh_private_key }}
