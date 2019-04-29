@@ -112,3 +112,9 @@
       mode=600
   tags: ['cert_agent', 'cert_agent:configuration']
 
+- name: enable cert_agent systemd service on boot
+  systemd:
+    name: cert_agent.service
+    enabled: True
+    state: started
+  tags: ['cert_agent', 'cert_agent:configuration']
