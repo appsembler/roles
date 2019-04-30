@@ -1,0 +1,6 @@
+---
+
+fix_dir_perms_path: "/var/www"
+fix_dir_perms_owner: "www-data"
+fix_dir_perms_group: "www-data"
+fix_dir_perms_mode: "755"
