@@ -1,0 +1,9 @@
+---
+
+- name: Fix directory permissions
+  file:
+    state: directory
+    path: "{{ fix_dir_perms_path }}"
+    owner: "{{ fix_dir_perms_owner }}"
+    group: "{{ fix_dir_perms_group }}"
+    mode: "{{ fix_dir_perms_mode }}"
