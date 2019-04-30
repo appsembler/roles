@@ -225,3 +225,17 @@
       {{ letsencrypt_command }} renew --agree-tos --post-hook='service nginx reload'
   tags:
     - letsencrypt
+
+- name: Create a cleanup cronjob to clear old key and csr files
+  # see the description in defaults/main.yml
+  # only very rare situations (like Tahoe) will need this.
+  cron:
+    name: "letsencrypt disk cleanup"
+    cron_file: certbot_appsembler
+    special_time: daily
+    user: root
+    job: >
+      find /etc/letsencrypt/{keys,csr} -type f -mtime +{{ letsencrypt_cleanup_days }} -exec rm {} \;
+    when: letsencrypt_cleanup_enable
+    tags:
+    - letsencrypt

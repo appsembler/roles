@@ -30,3 +30,12 @@ letsencrypt_enable_default_server: false
 # letsencrypt_certs:
 #   - domains: ["foo.example.com", "bar.example.com"]
 #   - domains: ["baz.example.com"]
+
+# enables a cronjob that deletes old keys/csr files
+# those files are small and in 99.9% of deployments
+# will not consume enough disk space to be worth worrying about.
+# For very special cases like Tahoe, using a network filesystem
+# the per-file cost is high enough that we need to clean up
+# occasionally.
+letsencrypt_cleanup_enable: false
+letsencrypt_cleanup_days: 180
