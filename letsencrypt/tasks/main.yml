@@ -236,6 +236,6 @@
     user: root
     job: >
       find /etc/letsencrypt/{keys,csr} -type f -mtime +{{ letsencrypt_cleanup_days }} -exec rm {} \;
-    when: letsencrypt_cleanup_enable
-    tags:
+  when: letsencrypt_cleanup_enable
+  tags:
     - letsencrypt
