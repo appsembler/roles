@@ -35,6 +35,20 @@
   become_user: "{{ letsencrypt_webuser }}"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
+# depending on the order that letsencrypt and nginx roles get run
+# on an initial deploy, there is a way that `/var/www` can end up
+# with restrictive permissions that prevent nginx from getting
+# into the `/var/www/letsencrypt/` directory.
+- name: Fix webroot parent directory permissions
+  file:
+    state: directory
+    path: "{{ letsencrypt_webroot_parent }}"
+    owner: "{{ letsencrypt_webuser }}"
+    group: "{{ letsencrypt_webuser }}"
+  become: True
+  become_user: "{{ letsencrypt_webuser }}"
+  tags: ['letsencrypt', 'letsencrypt:configuration']
+
 - name: Count the number of certbot installations
   shell: whereis {{ letsencrypt_command }} | grep -w -o '/[^ ]*bin/[^ ]*{{ letsencrypt_command }}' | wc -l
   register: certbot_count_call
