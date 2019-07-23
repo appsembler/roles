@@ -7,7 +7,6 @@
     - incron
     - letsencrypt
     - logstash
-    - monit
     - openjdk
     - ossec
     - sftp
