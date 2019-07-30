@@ -11,10 +11,10 @@ monit_extra_configs:
 monit_log_path: "/var/log/monit.log"
 monit_check_interval: 60
 monit_check_delay: 60
-monit_check_cpu_usage: yes
-monit_check_memory_usage: yes
-monit_check_disk_usage: yes
-monit_check_disk_io: no  # requires monit 5.21
+monit_check_cpu_usage: true
+monit_check_memory_usage: true
+monit_check_disk_usage: true
+monit_check_disk_io: false  # requires monit 5.21
 monit_alert_cycles: 15
 monit_cpu_usage: "90%"
 monit_memory_usage: "90%"
@@ -43,4 +43,4 @@ monit_check_hosts_defaults: {}
 #   protocol: http
 #   port: 80
 
-monit_force_restart: no
+monit_force_restart: false

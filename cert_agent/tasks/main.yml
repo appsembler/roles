@@ -40,7 +40,12 @@
 
 - name: Set up virtualenv postactivate scripts
   become_user: "{{ cert_agent_app_user }}"
-  template: src=postactivate dest={{cert_agent_venv_dir}}/bin/postactivate mode=0700 owner={{ cert_agent_app_user }} group={{ cert_agent_app_user }}
+  template:
+    src=postactivate
+    dest="{{cert_agent_venv_dir}}/bin/postactivate"
+    mode=0700
+    owner="{{ cert_agent_app_user }}"
+    group="{{ cert_agent_app_user }}"
   tags: ['cert_agent', 'cert_agent:virtualenv']
 
 - name: Wire project directory to the virtualenv
@@ -84,20 +89,20 @@
 
 - name: Copy env file
   template:
-      src=env.j2
-      dest=/home/{{ cert_agent_app_user }}/env
-      owner={{ cert_agent_app_user }}
-      mode=644
+    src=env.j2
+    dest=/home/{{ cert_agent_app_user }}/env
+    owner={{ cert_agent_app_user }}
+    mode=644
   notify:
     - restart cert_agent
   tags: ['cert_agent', 'cert_agent:configuration']
 
 - name: Copy cert_agent systemd service
   template:
-      src=cert_agent.service
-      dest=/etc/systemd/system/cert_agent.service
-      owner=root
-      mode=644
+    src=cert_agent.service
+    dest=/etc/systemd/system/cert_agent.service
+    owner=root
+    mode=644
   notify:
     - reload systemd configuration
     - restart cert_agent
@@ -106,15 +111,15 @@
 - name: Copy cert_agent ssh private key
   become_user: "{{ cert_agent_app_user }}"
   copy:
-      content={{ cert_agent_ssh_private_key }}
-      dest=/home/{{ cert_agent_app_user }}/.ssh/id_rsa
-      owner={{ cert_agent_app_user }}
-      mode=600
+    content={{ cert_agent_ssh_private_key }}
+    dest=/home/{{ cert_agent_app_user }}/.ssh/id_rsa
+    owner={{ cert_agent_app_user }}
+    mode=600
   tags: ['cert_agent', 'cert_agent:configuration']
 
 - name: enable cert_agent systemd service on boot
   systemd:
     name: cert_agent.service
-    enabled: True
+    enabled: true
     state: started
   tags: ['cert_agent', 'cert_agent:configuration']

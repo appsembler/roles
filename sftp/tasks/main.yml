@@ -37,7 +37,7 @@
 - name: Configure sftp settings
   blockinfile:
     dest: /etc/ssh/sshd_config
-    backup: yes
+    backup: true
     block: |
       Match group {{ sftp_group }}
         ChrootDirectory %h

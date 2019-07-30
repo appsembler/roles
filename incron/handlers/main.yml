@@ -1,4 +1,4 @@
 ---
 
-- name: restart incron 
+- name: restart incron
   service: name=incron state=restarted

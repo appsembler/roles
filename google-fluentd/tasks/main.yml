@@ -25,21 +25,21 @@
   template:
     src: google-fluentd.conf.j2
     dest: "/etc/google-fluentd/google-fluentd.conf"
-    backup: yes
+    backup: true
   notify: restart google-fluentd
 
 - name: Copy custom configurations
   copy:
     src: "{{ item }}"
     dest: "/etc/google-fluentd/config.d/{{ item | basename }}"
-    backup: yes
+    backup: true
   with_items: "{{ google_fluent_custom_config_files }}"
 
 - name: Copy custom configurations
   template:
     src: "{{ item }}"
     dest: "/etc/google-fluentd/config.d/{{ item | basename | regex_search('(.+\\.conf)') }}"
-    backup: yes
+    backup: true
   with_items: "{{ google_fluent_custom_config_templates }}"
 
 - name: Active configurations

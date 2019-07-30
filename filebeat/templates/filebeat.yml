@@ -1,3 +1,4 @@
+---
 filebeat:
     prospectors:
     {{ filebeat_prospectors | to_nice_yaml | indent(4) }}

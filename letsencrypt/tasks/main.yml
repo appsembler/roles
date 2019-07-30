@@ -7,13 +7,13 @@
     - letsencrypt
     - letsencrypt:install
 
-- name: Install Let's Encrypt
+- name: "Install Let's Encrypt"
   apt:
     name: "{{ letsencrypt_package }}"
-    update_cache: yes
+    update_cache: false
   tags: ['letsencrypt', 'letsencrypt:install']
 
-- name: Create Let's Encrypt directories
+- name: "Create Let's Encrypt directories"
   file:
     state: directory
     path: "{{ item }}"
@@ -25,13 +25,13 @@
     - "/var/lib/letsencrypt"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
-- name: Create Let's Encrypt webroot directory
+- name: "Create Let's Encrypt webroot directory"
   file:
     state: directory
     path: "{{ letsencrypt_webroot }}"
     owner: "{{ letsencrypt_webuser }}"
     group: "{{ letsencrypt_webuser }}"
-  become: True
+  become: true
   become_user: "{{ letsencrypt_webuser }}"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
@@ -45,14 +45,14 @@
     path: "{{ letsencrypt_webroot_parent }}"
     owner: "{{ letsencrypt_webuser }}"
     group: "{{ letsencrypt_webuser }}"
-  become: True
+  become: true
   become_user: "{{ letsencrypt_webuser }}"
   tags: ['letsencrypt', 'letsencrypt:configuration']
 
 - name: Count the number of certbot installations
   shell: whereis {{ letsencrypt_command }} | grep -w -o '/[^ ]*bin/[^ ]*{{ letsencrypt_command }}' | wc -l
   register: certbot_count_call
-  become: True
+  become: true
   become_user: root
   tags:
     - letsencrypt
@@ -60,7 +60,7 @@
     - letsencrypt:check
 
 - fail:
-    msg: There's more than one certbot installation
+    msg: "There's more than one certbot installation"
     # Login to the server and run: `$ whereis certbot`.
     # Unfortunately, there's no clear way to solve this issue, so try to solve it manually. Suggestion:
     #   - `$ sudo apt-get purge certbot`
@@ -76,7 +76,7 @@
 - name: Get the certbot version
   shell: certbot --version 2>&1 | cut -d ' ' -f 2
   register: certbot_version_call
-  become: True
+  become: true
   become_user: root
   tags:
     - letsencrypt
@@ -159,7 +159,7 @@
     --webroot-path "{{ letsencrypt_webroot }}"
     --domains {{ item.domains | join(' --domains ') }}
   with_items: "{{ letsencrypt_certs }}"
-  become: True
+  become: true
   become_user: root
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "webroot"
@@ -171,7 +171,7 @@
   command: >
     {{ letsencrypt_command }} renew --cert-name {{ item.domains[0] }}
   with_items: "{{ letsencrypt_certs }}"
-  become: True
+  become: true
   become_user: root
   when:
     - letsencrypt_run|bool == true
@@ -196,7 +196,7 @@
   args:
     creates: /etc/letsencrypt/live/{{ item.domains[0] }}/fullchain.pem
   with_items: "{{ letsencrypt_certs }}"
-  become: True
+  become: true
   become_user: root
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" and letsencrypt_execute_for_single_domain == false
@@ -207,7 +207,7 @@
     {{ letsencrypt_command }} certonly {{ letsencrypt_flags }} --agree-tos -m "{{ letsencrypt_email }}" --manual --manual-public-ip-logging-ok --preferred-challenges=http --manual-auth-hook /opt/scripts/authenticator.sh -d {{ letsencrypt_single_cert }}
   args:
     creates: /etc/letsencrypt/live/{{ letsencrypt_single_cert }}/fullchain.pem
-  become: True
+  become: true
   become_user: root
   run_once: true
   when: letsencrypt_run|bool == true and letsencrypt_certbot_plugin == "manual" and letsencrypt_execute_for_single_domain == true

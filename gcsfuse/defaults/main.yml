@@ -5,22 +5,3 @@ gcsfuse_apt_key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
 gcsfuse_package: "gcsfuse"
 gcsfuse_mounts: []
 gcsfuse_keyfiles: []
-
-#gcsfuse_mounts:
-#  - bucket: "my-bucket"
-#    path: "/var/lib/mounts/my-bucket"
-#    owner: "my-user"
-#    group: "my-group"
-#    mode: "0770"
-#    keyfile: "/etc/credentials/service-account-creds.json"
-#    allow_other: false # --> See here: http://manpages.ubuntu.com/manpages/xenial/man8/mount.fuse.8.html
-#    ^ this option only works if the owner is root
-#
-#gcsfuse_keyfiles:
-#  - content: |
-#      Ym/20U0uqaLgtsMKHAG6TbGoM6Y9B27ruX0rSXb6F4dRIgoTbJ20Lg+e/UxQSPBWaTsh6QXl9noI
-#      ew3BumVLglS14ws4okuMHtPCycx33G/uEdSM5U/wRjOaBNiWV6SM/O2NQg==
-#    dest: "/etc/credentials/service-account-creds.json"
-#    owner: "my-user"
-#    group: "my-group"
-#    mode: "0440"

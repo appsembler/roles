@@ -34,7 +34,7 @@ snort_oinkcode: "oinkoink"
 snort_custom_rules_files:
   - "custom.rules"
 snort_custom_rules: []
-snort_force_restart: no
+snort_force_restart: false
 
 snort_pulledpork_base_url: "https://github.com/shirkdog/pulledpork/archive"
 snort_pulledpork_version: "0.7.2"
@@ -42,10 +42,10 @@ snort_pulledpork_archive: "v{{ snort_pulledpork_version}}.tar.gz"
 snort_pulledpork_checksum: "sha256:50046477d5d1a18aec131a56bd3f21170057d8a31fd6f30af706e31d5b14bd0a"
 snort_pulledpork_config: "pulledpork.conf"
 snort_pulledpork_config_dir: "/etc/pulledpork"
-snort_pulledpork_run: yes
+snort_pulledpork_run: true
 snort_pulledpork_rule_urls:
   - "https://www.snort.org/reg-rules/|snortrules-snapshot.tar.gz|{{ snort_oinkcode }}"
   - "https://snort.org/downloads/community/|community-rules.tar.gz|Community"
   - "http://talosintelligence.com/feeds/ip-filter.blf|IPBLACKLIST|open"
   - "https://www.snort.org/reg-rules/|opensource.gz|{{ snort_oinkcode }}"
-snort_pulledpork_ips_policy : "balanced"  # security, connectivity, or balanced
+snort_pulledpork_ips_policy: "balanced"  # security, connectivity, or balanced
