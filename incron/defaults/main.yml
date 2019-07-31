@@ -7,6 +7,6 @@
 incron_jobs:
   - path: "/tmp"
     mask: "IN_CREATE,IN_DELETE,IN_MODIFY"
-    command:  "/bin/true"
+    command: "/bin/true"
 
-incron_restart: no
+incron_restart: false

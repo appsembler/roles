@@ -25,9 +25,9 @@ ossec_agent_config: "agent/ossec.conf"
 ossec_openssl_config: "openssl.cnf"
 ossec_authd_port: 1515
 ossec_authd_state: "started"
-ossec_authd_enabled: yes
+ossec_authd_enabled: true
 ossec_server_ip: ""
-ossec_force_restart: no
+ossec_force_restart: false
 
 # syscheck (file integrity checking)
 ossec_syscheck_enabled: "y"

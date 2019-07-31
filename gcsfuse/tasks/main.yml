@@ -19,7 +19,7 @@
     owner: "{{ item.owner | default(omit) }}"
     group: "{{ item.group | default(omit) }}"
     mode: "{{ item.mode | default(omit) }}"
-  become: True
+  become: true
   become_user: "{{ item.owner | default('root') }}"
   with_items: "{{ gcsfuse_mounts }}"
   tags: ['gcsfuse', 'gcsfuse:configuration']
@@ -45,7 +45,7 @@
   shell: gcsfuse {{ (item.allow_other|default(false)) | ternary("-o allow_other", "") }}  -o allow_other {{ (item.keyfile != None) | ternary("--key-file " + item.keyfile, "") }} "{{ item.bucket }}" "{{ item.path }}" && touch "{{ item.path }}/.mounted"
   args:
     creates: "{{ item.path }}/.mounted"
-  become: True
+  become: true
   become_user: "{{ item.owner | default('root') }}"
   with_items: "{{ gcsfuse_mounts }}"
   tags: ['gcsfuse', 'gcsfuse:configuration']

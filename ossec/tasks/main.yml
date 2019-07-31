@@ -92,4 +92,3 @@
   notify: restart ossec
   when: ossec_force_restart
   tags: ['ossec', 'ossec:configuration']
-

@@ -8,7 +8,7 @@ filebeat_config: "filebeat.yml"
 
 filebeat_prospectors:
   - paths:
-    - /var/log/*.log
+      - /var/log/*.log
 
 filebeat_outputs:
   logstash:

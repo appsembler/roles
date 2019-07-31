@@ -4,4 +4,3 @@
 
 - name: restart cert_agent
   service: name=cert_agent state=restarted
-

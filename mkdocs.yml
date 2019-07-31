@@ -1,3 +1,4 @@
+---
 dev_addr: '127.0.0.1:8001'
 site_name: "Appsembler Roles"
 site_url: "https://github.com/appsembler/roles"
@@ -8,5 +9,5 @@ pages:
 theme: readthedocs
 markdown_extensions:
   - toc:
-      anchorlink: True
+      anchorlink: true
   - admonition:

@@ -4,7 +4,7 @@ logstash_repo: "deb https://artifacts.elastic.co/packages/5.x/apt stable main"
 logstash_apt_key_id: "46095ACC8548582C1A2699A9D27D666CD88E42B4"
 logstash_package: "logstash"
 
-logstash_remove_configs: no
+logstash_remove_configs: false
 logstash_config_dir: "/etc/logstash/conf.d"
 logstash_default_configs:
   - "10_beats_input.conf"
@@ -25,7 +25,7 @@ logstash_default_configs:
   - "30_pagerduty_output.conf"
 logstash_custom_configs: []
 
-logstash_remove_patterns: no
+logstash_remove_patterns: false
 logstash_pattern_dir: "/opt/logstash/patterns"
 logstash_default_patterns:
   - "celery"
@@ -52,8 +52,8 @@ logstash_output_elasticsearch_password: ""
 logstash_output_pagerduty_alerts: []
 logstash_output_pagerduty_service_key: ""
 
-logstash_restart: no
+logstash_restart: false
 
 logstash_cleanup_script: "remove_old_indices.py"
-logstash_cleanup: no
+logstash_cleanup: false
 logstash_remove_older_than: 30

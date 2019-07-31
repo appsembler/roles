@@ -13,4 +13,4 @@ stackdriver_proxy_url: ""
 stackdriver_api_key: ""
 stackdriver_detect_gcm: "yes"
 
-stackdriver_restart: no
+stackdriver_restart: false
