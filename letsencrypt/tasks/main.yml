@@ -154,6 +154,7 @@
     {{ letsencrypt_command }} certonly {{ letsencrypt_flags }}
     --cert-name {{ item.domains[0] }}
     --agree-tos
+    -n
     --email "{{ letsencrypt_email }}"
     --webroot
     --webroot-path "{{ letsencrypt_webroot }}"
