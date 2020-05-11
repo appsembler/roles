@@ -5,6 +5,7 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y software-pro
 RUN apt-get update && apt-get install -y \
     git \
     init \
+    python3 \
     python-dev \
     python-pip \
     python-virtualenv \
