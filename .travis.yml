@@ -3,6 +3,9 @@ sudo: required
 
 env:
   - distribution: ubuntu
+    version: bionic
+    ansible: 2.4.3.0
+  - distribution: ubuntu
     version: xenial
     ansible: 2.4.3.0
   - distribution: ubuntu
