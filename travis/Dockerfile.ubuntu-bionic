@@ -4,10 +4,10 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y software-pro
 
 RUN apt-get update && apt-get install -y \
     git \
+    init \
     python-dev \
     python-pip \
     python-virtualenv \
-    init \
  && rm -rf /var/lib/apt/lists/*
 
 ARG ansible_version=2.4.3.0

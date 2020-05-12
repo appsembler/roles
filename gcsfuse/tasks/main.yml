@@ -1,11 +1,11 @@
 ---
 
-- name: Add gcsfuse repo
-  apt_repository: repo="{{ gcsfuse_repo }}"
-  tags: ['gcsfuse', 'gcsfuse:install']
-
 - name: Add repository key
   apt_key: url="{{ gcsfuse_apt_key_url }}"
+  tags: ['gcsfuse', 'gcsfuse:install']
+
+- name: Add gcsfuse repo
+  apt_repository: repo="{{ gcsfuse_repo }}"
   tags: ['gcsfuse', 'gcsfuse:install']
 
 - name: Install gcsfuse
