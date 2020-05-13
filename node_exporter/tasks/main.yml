@@ -1,0 +1,68 @@
+---
+- name: Create the node_exporter group
+  group:
+    name: "{{ node_exporter_system_group }}"
+    state: present
+    system: true
+  when: node_exporter_system_group != "root"
+  tags: ['node_exporter', 'node_exporter:install']
+
+- name: Create the node_exporter user
+  user:
+    name: "{{ node_exporter_system_user }}"
+    groups: "{{ node_exporter_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
+  when: node_exporter_system_user != "root"
+  tags: ['node_exporter', 'node_exporter:install']
+
+- name: prepare a directory
+  file:
+    path: /opt/node_exporter
+    owner: root
+    group: root
+    state: directory
+  tags: ['node_exporter', 'node_exporter:install']
+
+- name: install the binary
+  get_url:
+    url: "https://storage.googleapis.com/appsembler-public-mirror/binaries/node_exporter/{{ node_exporter_version }}/node_exporter"
+    dest: /opt/node_exporter/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+    checksum: "{{ node_exporter_sha256checksum }}"
+  tags: ['node_exporter', 'node_exporter:install']
+
+- name: Copy the Node Exporter systemd service file
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart node_exporter
+  tags: ['node_exporter', 'node_exporter:configure']
+
+- name: Create textfile collector dir
+  file:
+    path: "{{ node_exporter_textfile_dir }}"
+    state: directory
+    owner: "{{ node_exporter_system_user }}"
+    group: "{{ node_exporter_system_group }}"
+    recurse: true
+    mode: 0775
+  when: node_exporter_textfile_dir | length > 0
+  tags: ['node_exporter', 'node_exporter:configure']
+
+- name: Ensure Node Exporter is enabled on boot
+  become: true
+  systemd:
+    daemon_reload: true
+    name: node_exporter
+    enabled: true
+    state: started
+  tags: ['node_exporter', 'node_exporter:configure']
