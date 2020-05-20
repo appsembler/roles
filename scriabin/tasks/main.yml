@@ -10,6 +10,7 @@
   with_items:
     - {name: prometheus_client, version: "{{ scriabin_prometheus_client_version }}"}
     - {name: pygtail, version: "{{ scriabin_pygtail_version }}"}
+    - {name: python-dateutil, version: "{{ scriabin_dateutil_version }}"}
   tags: ['scriabin', 'scriabin:install']
 
 - name: Copy script

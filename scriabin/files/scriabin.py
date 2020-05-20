@@ -3,6 +3,7 @@ import json
 import os
 import socket
 from datetime import datetime, timedelta
+from dateutil import parser, tz
 from pygtail import Pygtail
 
 from prometheus_client import CollectorRegistry, push_to_gateway
@@ -21,8 +22,6 @@ PUSHGATEWAY = os.environ.get("SCRIABIN_PUSHGATEWAY",
 SKIP_PATHS = os.environ.get(
     "SCRIABIN_SKIP_PATHS",
     "/static/,/admin/,/hijack/,/favicon.ico").split(",")
-TIME_FORMAT = os.environ.get("SCRIABIN_TIME_FORMAT",
-                             '%Y-%m-%dT%H:%M:%S+00:00')
 
 INSTANCE = socket.gethostname()
 OFFSET_FILE = "/tmp/scriabin-{}-{}.offset".format(PROJECT, APP)
@@ -63,14 +62,14 @@ def log_entries(now=None, window_minutes=1):
 
     ie, within our time window, and not in the skip list """
     if now is None:
-        now = datetime.utcnow()
+        now = datetime.now(tz.tzlocal())
     start = now - timedelta(minutes=window_minutes)
     errors = 0
     entries = []
     for line in Pygtail(LOG_FILE, offset_file=OFFSET_FILE):
         try:
             d = json.loads(line)
-            ts = datetime.strptime(d['time_local'], TIME_FORMAT)
+            ts = parser.parse(d['time_local'])
             if ts < start:
                 # ignore entries that are too old
                 # with pygtail, this should mostly only happen on the first run
