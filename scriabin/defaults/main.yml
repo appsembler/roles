@@ -26,3 +26,4 @@ scriabin_ve: "{{ scriabin_root }}ve"
 scriabin_python_version: python3
 scriabin_prometheus_client_version: 0.2.0
 scriabin_pygtail_version: 0.8.0
+scriabin_dateutil_version: 2.8.1
