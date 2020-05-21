@@ -1,6 +1,6 @@
 ---
 
-scriabin_project: '{{ COMMON_DEPLOYMENT|default("project") }}-{{ COMMON_ENVIRONMENT|default("staging") }}'
+scriabin_project: '{{ COMMON_DEPLOYMENT|default("project") }}-{{ COMMON_RELEASE|default("release")}}-{{ COMMON_ENVIRONMENT|default("staging") }}'
 
 # we have `stage-pushgateway` and `pushgateway` setup, and we need to
 # map `staging` and `prod` to each of those respectively. This is the
