@@ -8,7 +8,9 @@ User={{ cert_agent_app_user }}
 Group={{ cert_agent_app_user }}
 WorkingDirectory={{ cert_agent_django_project_dir }}
 RuntimeDirectory={{ cert_agent_gunicorn_runtime_dir_name }}
-ExecStart={{ cert_agent_venv_dir }}/bin/gunicorn --pid {{ cert_agent_gunicorn_pid }} \
+ExecStart={{ cert_agent_venv_dir }}/bin/gunicorn \
+          -c {{ cert_agent_django_project_dir }}/cert_agent/gunicorn_conf.py \
+          --pid {{ cert_agent_gunicorn_pid }} \
           --bind {{ cert_agent_gunicorn_bind_ip }}:{{ cert_agent_gunicorn_port }} \
           -w 3 \
           cert_agent.wsgi:application \
