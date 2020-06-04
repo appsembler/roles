@@ -28,8 +28,8 @@ cert_agent_statsd_host: 'stage-prometheus.infra.appsembler.com'
 cert_agent_statsd_port: 9125
 cert_agent_statsd_prefix: 'tahoe_cert_agent'
 
-cert_agent_honeycomb_dataset: "changeme"
-cert_agent_honeycomb_writekey: "changeme"
+cert_agent_honeycomb_dataset: !!null
+cert_agent_honeycomb_writekey: !!null
 
 cert_agent_django_env_vars: {
   API_SECRET_KEY: "{{cert_agent_api_secret_key}}",
