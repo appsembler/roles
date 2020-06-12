@@ -35,7 +35,7 @@
     requirements='requirements.txt'
     virtualenv={{cert_agent_venv_dir}}
     chdir={{cert_agent_git_repo_dir}}
-    virtualenv_python=python2.7
+    virtualenv_python=python3
   tags: ['cert_agent', 'cert_agent:requirements']
 
 - name: Set up virtualenv postactivate scripts
