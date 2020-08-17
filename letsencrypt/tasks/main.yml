@@ -241,16 +241,25 @@
   tags:
     - letsencrypt
 
-- name: Create a cleanup cronjob to clear old key and csr files
+- name: Create cleanup script to clear old files
   # see the description in defaults/main.yml
   # only very rare situations (like Tahoe) will need this.
+  template:
+    src: opt/scripts/le_cleanup.sh.j2
+    dest: /opt/scripts/le_cleanup.sh
+    mode: 0744
+  when: letsencrypt_cleanup_enable
+  tags:
+    - letsencrypt
+
+- name: Cronjob to run the cleanup script nightly
   cron:
     name: "letsencrypt disk cleanup"
     cron_file: certbot_appsembler
     special_time: daily
     user: root
     job: >
-      find /etc/letsencrypt/{keys,csr} -type f -mtime +{{ letsencrypt_cleanup_days }} -exec rm {} \;
+      /opt/scripts/le_cleanup.sh
   when: letsencrypt_cleanup_enable
   tags:
     - letsencrypt
