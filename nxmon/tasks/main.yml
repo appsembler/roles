@@ -1,0 +1,21 @@
+---
+
+- name: install certain python modules for nxmon
+  pip:
+    name: "{{ item.name }}"
+    version: "{{ item.version }}"
+    virtualenv: "{{ nxmon_ve }}"
+    virtualenv_python: "{{ nxmon_python_version }}"
+    state: present
+  with_items:
+    - {name: prometheus_client, version: "{{ nxmon_prometheus_client_version }}"}
+
+- name: Copy script
+  copy: src=nxmon.py dest="{{ nxmon_root }}/nxmon" owner=www-data mode=0755
+
+- name: Create cron job for Nxmon
+  cron:
+    name: "nxmon"
+    user: root
+    job: "{{ nxmon_ve }}/bin/python {{ nxmon_root }}/nxmon"
+    minute: "*/5"  # update every five minutes
