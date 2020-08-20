@@ -1,0 +1,6 @@
+---
+
+nxmon_root: /opt/nxmon
+nxmon_ve: "{{ nxmon_root }}/ve"
+nxmon_python_version: python3
+nxmon_prometheus_client_version: 0.2.0
