@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from dateutil import parser, tz
 from pygtail import Pygtail
 
-from prometheus_client import CollectorRegistry, push_to_gateway
+from prometheus_client import CollectorRegistry, push_to_gateway, write_to_textfile
 from prometheus_client import Gauge, Histogram
 
 # gather up environment variables
@@ -110,6 +110,7 @@ def main():
 
     push_to_gateway(PUSHGATEWAY, job="{}_{}_nginx".format(PROJECT, APP),
                     registry=registry, grouping_key={'instance': INSTANCE})
+    write_to_textfile("/var/lib/node_exporter/nginx.prom", registry)
 
 
 if __name__ == "__main__":
