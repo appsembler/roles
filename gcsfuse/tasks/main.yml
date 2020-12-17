@@ -42,7 +42,7 @@
   tags: ['gcsfuse', 'gcsfuse:configuration']
 
 - name: Mount buckets in directories
-  shell: gcsfuse {{ (item.allow_other|default(false)) | ternary("-o allow_other", "") }}  -o allow_other {{ (item.keyfile != None) | ternary("--key-file " + item.keyfile, "") }} -o nonempty "{{ item.bucket }}" "{{ item.path }}" && touch "{{ item.path }}/.mounted"
+  shell: gcsfuse {{ (item.allow_other|default(false)) | ternary("-o allow_other", "") }}  -o allow_other {{ (item.keyfile != None) | ternary("--key-file " + item.keyfile, "") }} "{{ item.bucket }}" "{{ item.path }}" && touch "{{ item.path }}/.mounted"
   args:
     creates: "{{ item.path }}/.mounted"
   become: true
@@ -55,7 +55,7 @@
     name: "Mount bucket `{{ item.bucket }}` at `{{ item.path }}`"
     cron_file: "gcsfuse"
     special_time: "reboot"
-    job: gcsfuse {{ (item.allow_other|default(false)) | ternary("-o allow_other", "") }} {{ (item.keyfile != None) | ternary("--key-file " + item.keyfile, "") }} -o nonempty "{{ item.bucket }}" "{{ item.path }}" && touch "{{ item.path }}/.mounted"
+    job: gcsfuse {{ (item.allow_other|default(false)) | ternary("-o allow_other", "") }} {{ (item.keyfile != None) | ternary("--key-file " + item.keyfile, "") }} "{{ item.bucket }}" "{{ item.path }}" && touch "{{ item.path }}/.mounted"
     user: "{{ item.owner | default('root') }}"
   with_items: "{{ gcsfuse_mounts }}"
   tags: ['gcsfuse', 'gcsfuse:configuration']
