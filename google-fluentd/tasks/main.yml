@@ -2,7 +2,9 @@
 
 - name: install curl
   apt:
-    pkg: curl
+    pkg:
+      - curl
+      - apt-utils
     state: present
 
 - name: Check if Logging Agent is installed
