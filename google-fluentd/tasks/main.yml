@@ -1,5 +1,10 @@
 ---
 
+- name: install curl
+  apt:
+    pkg: curl
+    state: present
+
 - name: Check if Logging Agent is installed
   stat:
     path: "/opt/google-fluentd/usr/sbin/google-fluentd"
