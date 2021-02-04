@@ -6,6 +6,5 @@
     - incron
     - node_exporter
     - sshguard
-    - google-fluentd
     - fix_dir_perms
     - scriabin
