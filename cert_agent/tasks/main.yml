@@ -108,6 +108,14 @@
     - restart cert_agent
   tags: ['cert_agent', 'cert_agent:configuration']
 
+- name: Create cert_agent .ssh directory
+  become_user: "{{ cert_agent_app_user }}"
+  file:
+    path: "/home/{{ cert_agent_app_user }}/.ssh"
+    state: directory
+    owner: "{{ cert_agent_app_user }}"
+  tags: ['cert_agent', 'cert_agent:configuration']
+
 - name: Copy cert_agent ssh private key
   become_user: "{{ cert_agent_app_user }}"
   copy:
